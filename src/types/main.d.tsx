@@ -1,11 +1,16 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 
 export interface IValues {
   alarmTime: number;
   alarmDisc: string;
   alarmTitle: string;
+  id: number;
 }
 
+export interface IList {
+  alarms: IValues[];
+  setAlarms: React.Dispatch<SetStateAction<IValues[]>>
+}
 
 export interface IInput
   extends React.DetailedHTMLProps<

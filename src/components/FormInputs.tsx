@@ -10,7 +10,7 @@ const Form: React.FC = () => {
 
   const [values, setValues] = useState<IValues>({
     alarmTime: 0,
-    alarmDisc: "",
+    alarmDesc: "",
     alarmTitle: "",
     id: id,
   });
@@ -29,7 +29,7 @@ const Form: React.FC = () => {
     // console.log(values);
     const newValue = { ...values, id: id };
     if (
-      values.alarmDisc !== "" &&
+      values.alarmDesc !== "" &&
       values.alarmTitle !== "" &&
       values.alarmTime !== 0
     ) {
@@ -63,9 +63,9 @@ const Form: React.FC = () => {
             type="text"
             lable="Alarm Discription"
             onChange={(event) =>
-              onChangeHandler("alarmDisc", event.target.value)
+              onChangeHandler("alarmDesc", event.target.value)
             }
-            value={values.alarmDisc}
+            value={values.alarmDesc}
           />
           <Input
             type="text"

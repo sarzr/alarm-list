@@ -11,7 +11,6 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
   const showModalHandler = (alarm: IValues) => {
     setShowModal(true);
     setValueInput(alarm)
-    console.log(ValueInput);
   };
 
   const deleteAlarm = (id: number) => {
@@ -36,7 +35,7 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
               <tr key={index} className="border-b hover:bg-gray-100">
                 <td className="py-4">{alarm.alarmTime}</td>
                 <td className="py-4">{alarm.alarmTitle}</td>
-                <td className="py-4">{alarm.alarmDisc}</td>
+                <td className="py-4">{alarm.alarmDesc}</td>
                 <td className="py-4 flex gap-2 justify-center text-base">
                   <button
                     onClick={() => showModalHandler(alarm)}
@@ -56,7 +55,7 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
           </tbody>
         </table>
       </div>
-      {showModal && <Modal setShowModal={setShowModal} alarm={ValueInput} />}
+      {showModal && <Modal setShowModal={setShowModal} alarm={ValueInput} setAlarms={setAlarms} />}
     </>
   );
 };

@@ -2,15 +2,33 @@ import React, { useState } from "react";
 import { IModal } from "../types/main.d";
 import Input from "./Input";
 
-const Modal: React.FC<IModal> = ({ setShowModal, alarm }) => {
+const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
   const closeModal = () => {
     setShowModal(false);
   };
 
-  const [edit, setEdit] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(alarm?.alarmTitle || "");
+  const [description, setDescription] = useState<string>(
+    alarm?.alarmDesc || ""
+  );
+  const [error, setError] = useState<string>("");
 
   const edited = () => {
-    setShowModal(false);
+    console.log(alarm);
+    if (description !== "" && title !== "") {
+      setAlarms((alarms) =>
+        alarms.map((a) =>
+          a.id === alarm?.id
+            ? { ...a, alarmDesc: description, alarmTitle: title }
+            : a
+        )
+      );
+      setError("");
+      setShowModal(false);
+    } else {
+      setError("Please enter the empty one");
+      setShowModal(true);
+    }
   };
 
   return (
@@ -30,22 +48,22 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm }) => {
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="flex justify-end mb-2">
-               <button onClick={closeModal}>
-               <svg
-                  aria-hidden="true"
-                  data-prefix="fal"
-                  data-icon="times"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
-                  className="svg-inline--fa fa-times fa-w-10 fa-7x w-3.5"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"
-                  ></path>
-                </svg>
-               </button>
+                <button onClick={closeModal}>
+                  <svg
+                    aria-hidden="true"
+                    data-prefix="fal"
+                    data-icon="times"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    className="svg-inline--fa fa-times fa-w-10 fa-7x w-3.5"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"
+                    ></path>
+                  </svg>
+                </button>
               </div>
               <div className="flex flex-shrink-0 items-center justify-center rounded-full sm:mx-0">
                 <img
@@ -59,8 +77,25 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm }) => {
               </div>
               <div className="flex flex-col gap-4 items-center">
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                  <Input type="text" lable="Alarm Title" value={alarm?.alarmTitle} />
-                  <Input type="text" lable="Alarm Discription" value={alarm?.alarmDisc} />
+                  <Input
+                    type="text"
+                    lable="Alarm Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <Input
+                    type="text"
+                    lable="Alarm Discription"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                  <p
+                    className={`text-red-600 mt-4 text-sm ${
+                      error ? "" : "hidden"
+                    }`}
+                  >
+                    {error}
+                  </p>
                 </div>
               </div>
             </div>

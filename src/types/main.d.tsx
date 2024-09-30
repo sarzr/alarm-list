@@ -2,7 +2,7 @@ import React, { SetStateAction } from "react";
 
 export interface IValues {
   alarmTime: number;
-  alarmDisc: string;
+  alarmDesc: string;
   alarmTitle: string;
   id: number;
 }
@@ -24,4 +24,5 @@ export interface IInput
 export interface IModal {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   alarm?: IValues
+  setAlarms: React.Dispatch<SetStateAction<IValues[]>>;
 }

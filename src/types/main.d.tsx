@@ -9,7 +9,7 @@ export interface IValues {
 
 export interface IList {
   alarms: IValues[];
-  setAlarms: React.Dispatch<SetStateAction<IValues[]>>
+  setAlarms: React.Dispatch<SetStateAction<IValues[]>>;
 }
 
 export interface IInput
@@ -19,4 +19,9 @@ export interface IInput
   > {
   lable?: string;
   type: React.HTMLInputTypeAttribute;
+}
+
+export interface IModal {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  alarm?: IValues
 }

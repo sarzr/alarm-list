@@ -26,7 +26,7 @@ const Form: React.FC = () => {
 
   const onSubmitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    console.log(values);
+    // console.log(values);
     const newValue = { ...values, id: id };
     if (
       values.alarmDisc !== "" &&
@@ -39,7 +39,7 @@ const Form: React.FC = () => {
       setError("Please enter the empty ones...");
     }
     setId(id + 1);
-    console.log(alarms);
+    // console.log(alarms);
   };
 
 
@@ -77,7 +77,7 @@ const Form: React.FC = () => {
           />
           <button
             type="submit"
-            className="bg-green-600 text-white py-2 w-full rounded mt-4"
+            className="bg-green-600 text-white py-2 w-full rounded mt-4 hover:bg-green-700"
           >
             SUBMIT
           </button>

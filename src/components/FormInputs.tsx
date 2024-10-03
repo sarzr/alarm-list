@@ -20,7 +20,6 @@ const Form: React.FC = () => {
     return saveAlarms ? JSON.parse(saveAlarms) : [];
   });
 
-
   localStorage.setItem("alarms", JSON.stringify(alarms));
 
   const onChangeHandler = (

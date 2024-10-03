@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IModalTime } from "../types/main.d";
 
 const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
   const [showModalTime, setShowModalTime] = useState<boolean>(false);
   const [showAlarmTime, setShowAlarmTime] = useState<string>("");
   const [isOpen, setIsOpen] = useState<string[]>([]);
+  const [snoozeTime, setSnoozeTime] = useState<string>("");
+
+  const audioAlarm = useRef(new Audio("public/sound.mp3"));
 
   useEffect(() => {
     const showModalTimeHandler = () => {
@@ -20,6 +23,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
         if (currentTime === alarmTime && !isOpen.includes(alarmTime)) {
           setShowModalTime(true);
           setIsOpen((prevTime) => [...prevTime, alarmTime]);
+          audioAlarm.current.play();
         }
       });
     };
@@ -27,8 +31,27 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
     const interval = setInterval(showModalTimeHandler, 1000);
     return () => clearInterval(interval);
   }, [alarms, isOpen]);
+
   const closeModal = () => {
+    audioAlarm.current.pause();
     setShowModalTime(false);
+  };
+
+  const snoozeAlarm = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 5);
+    const snoozeTime = `${now.getHours()}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+    setIsOpen((prevTime) => [...prevTime, snoozeTime]);
+    setSnoozeTime(snoozeTime);
+
+    setTimeout(() => {
+      setShowModalTime(true);
+      audioAlarm.current.play();
+    }, 300000);
+    closeModal();
   };
 
   return (
@@ -52,8 +75,21 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
                 alt="alarm"
               />
             </div>
-            <div className="my-6 flex justify-center">
-              <p className="font-medium">Alarm Time: {showAlarmTime}</p>
+            <div className="my-6 flex justify-center items-center gap-2">
+              <div
+                onClick={() => {
+                  audioAlarm.current.pause();
+                }}
+              >
+                <img
+                  className="w-5 sm:w-8"
+                  src="../../public/images/icons8-sound-50.png"
+                  alt="sound-alarm"
+                />
+              </div>
+              <p className="text-sm sm:text-base sm:font-medium">
+                Alarm Time: {snoozeTime ? snoozeTime : showAlarmTime}
+              </p>
             </div>
             <div className="bg-gray-50 sm:flex sm:flex-row-reverse sm:px-6 mt-4">
               <button
@@ -65,6 +101,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
               </button>
               <button
                 type="button"
+                onClick={snoozeAlarm}
                 className="mt-3 inline-flex w-full justify-center rounded-md px-4 py-2 text-sm text-white shadow-sm bg-green-600 hover:bg-green-700 sm:mt-0 sm:w-auto"
               >
                 Snooze

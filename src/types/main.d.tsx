@@ -26,3 +26,6 @@ export interface IModal {
   alarm?: IValues
   setAlarms: React.Dispatch<SetStateAction<IValues[]>>;
 }
+export interface IModalTime {
+  alarms: IValues[]
+}

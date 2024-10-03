@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import Input from "./Input";
 import { IValues } from "../types/main.d";
 import List from "./List";
+import ModalTime from "./ModalTime";
 
 const Form: React.FC = () => {
-
   const [error, setError] = useState<string>("");
   const [id, setId] = useState<number>(1);
 
@@ -15,7 +15,13 @@ const Form: React.FC = () => {
     id: id,
   });
 
-  const [alarms, setAlarms] = useState<IValues[]>([]);
+  const [alarms, setAlarms] = useState<IValues[]>(() => {
+    const saveAlarms = localStorage.getItem("alarms");
+    return saveAlarms ? JSON.parse(saveAlarms) : [];
+  });
+
+
+  localStorage.setItem("alarms", JSON.stringify(alarms));
 
   const onChangeHandler = (
     inputName: keyof IValues,
@@ -34,14 +40,13 @@ const Form: React.FC = () => {
       values.alarmTime !== 0
     ) {
       setAlarms([...alarms, newValue]);
-      setError("")
+      setError("");
     } else {
       setError("Please enter the empty ones...");
     }
     setId(id + 1);
     // console.log(alarms);
   };
-
 
   return (
     <>
@@ -61,7 +66,7 @@ const Form: React.FC = () => {
           />
           <Input
             type="text"
-            lable="Alarm Discription"
+            lable="Alarm Description"
             onChange={(event) =>
               onChangeHandler("alarmDesc", event.target.value)
             }
@@ -81,10 +86,13 @@ const Form: React.FC = () => {
           >
             SUBMIT
           </button>
-          <p className={`text-red-500 text-sm mt-3 ${error ? "" : "hidden"}`}>{error}</p>
+          <p className={`text-red-500 text-sm mt-3 ${error ? "" : "hidden"}`}>
+            {error}
+          </p>
         </form>
       </div>
       <List alarms={alarms} setAlarms={setAlarms} />
+      <ModalTime alarms={alarms} />
     </>
   );
 };

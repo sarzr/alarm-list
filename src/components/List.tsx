@@ -5,17 +5,18 @@ import Modal from "./Modal";
 const List: React.FC<IList> = ({ alarms, setAlarms }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [ValueInput, setValueInput] = useState<IValues>()
+  const [ValueInput, setValueInput] = useState<IValues>();
 
 
   const showModalHandler = (alarm: IValues) => {
     setShowModal(true);
-    setValueInput(alarm)
+    setValueInput(alarm);
+    console.log(alarm);
   };
 
   const deleteAlarm = (id: number) => {
     setAlarms(alarms.filter((alarm) => alarm.id !== id));
-    console.log(id);
+    // console.log(id);
   };
 
   return (
@@ -55,7 +56,13 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
           </tbody>
         </table>
       </div>
-      {showModal && <Modal setShowModal={setShowModal} alarm={ValueInput} setAlarms={setAlarms} />}
+      {showModal && (
+        <Modal
+          setShowModal={setShowModal}
+          alarm={ValueInput}
+          setAlarms={setAlarms}
+        />
+      )}
     </>
   );
 };

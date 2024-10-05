@@ -31,7 +31,6 @@ const Form: React.FC = () => {
 
   const onSubmitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    // console.log(values);
     const newValue = { ...values, id: id };
     if (
       values.alarmDesc !== "" &&
@@ -44,14 +43,13 @@ const Form: React.FC = () => {
       setError("Please enter the empty ones...");
     }
     setId(id + 1);
-    // console.log(alarms);
   };
 
   return (
     <>
       <div className="flex flex-col items-center">
         <form
-          className="bg-white w-1/3 P-4 py-6 px-9 rounded shadow-md"
+          className="bg-white w-full sm:w-2/3 md:w-1/2 lg:w-1/3 sm:py-6 px-4 sm:px-9 rounded sm:shadow-md"
           onSubmit={onSubmitHandler}
         >
           <Input
@@ -81,7 +79,7 @@ const Form: React.FC = () => {
           />
           <button
             type="submit"
-            className="bg-green-600 text-white py-2 w-full rounded mt-4 hover:bg-green-700"
+            className="bg-green-600 text-white text-base sm:text-lg py-2 w-full rounded mt-4 hover:bg-green-700"
           >
             SUBMIT
           </button>

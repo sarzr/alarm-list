@@ -36,7 +36,6 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
       if (e.key === "Escape") {
         closeModal();
       }
-      // console.log(e.key);
     };
 
     document.addEventListener("keydown", keyDownHandler);

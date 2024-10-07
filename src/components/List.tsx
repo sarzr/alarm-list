@@ -3,12 +3,12 @@ import { IoIosArrowDown } from "react-icons/io";
 
 import { IList, IValues } from "../types/main.d";
 import Modal from "./Modal";
+import { toast } from "react-toastify";
 
 const List: React.FC<IList> = ({ alarms, setAlarms }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const [ValueInput, setValueInput] = useState<IValues>();
-
 
   const timeSort = () => {
     const sorted = [...alarms].sort((a, b) => {
@@ -31,6 +31,12 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
 
   const deleteAlarm = (id: number) => {
     setAlarms(alarms.filter((alarm) => alarm.id !== id));
+    toast.success("Deleted", {
+      style: {
+        fontSize: "15px",
+        borderRadius: "8px",
+      },
+    });
   };
 
   return (
@@ -62,8 +68,11 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {alarms.map((alarm, index) => (
-              <tr key={index} className="border-b hover:bg-gray-100 odd:bg-Grey">
+            {alarms.map((alarm) => (
+              <tr
+                key={alarm.id}
+                className="border-b hover:bg-gray-100 odd:bg-Grey"
+              >
                 <td className="py-4 text-sm md:text-base">{alarm.alarmTime}</td>
                 <td className="py-4">{alarm.alarmTitle}</td>
                 <td className="py-4">{alarm.alarmDesc}</td>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { IModalTime } from "../types/main.d";
+import { toast } from "react-toastify";
 
 const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
   const [showModalTime, setShowModalTime] = useState<boolean>(false);
@@ -52,6 +53,12 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
       audioAlarm.current.play();
     }, 300000);
     closeModal();
+    toast("Alarm set for 5 minutes from now", {
+      style: {
+        fontSize: "15px",
+        borderRadius: "8px",
+      },
+    });
   };
 
   return (

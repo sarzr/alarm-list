@@ -3,6 +3,7 @@ import Input from "./Input";
 import { IValues } from "../types/main.d";
 import List from "./List";
 import ModalTime from "./ModalTime";
+import { toast } from "react-toastify";
 
 const Form: React.FC = () => {
   const [error, setError] = useState<string>("");
@@ -43,6 +44,58 @@ const Form: React.FC = () => {
       setError("Please enter the empty ones...");
     }
     setId(id + 1);
+
+    const now = new Date();
+    const alarmSet = values.alarmTime;
+    // console.log(alarmSet, typeof alarmSet);
+
+    const currentTime = `${now.getHours()}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+    // console.log(currentTime, "now", typeof currentTime);
+
+    const [currentHour, currentMinute] = currentTime.split(":").map(Number);
+    const [alarmSetHour, alarmSetMinute] = alarmSet
+      .toString()
+      .split(":")
+      .map(Number);
+
+    const currentTimeMinutes = currentHour * 60 + currentMinute;
+    const alarmTimeMinutes = alarmSetHour * 60 + alarmSetMinute;
+
+    let calc = alarmTimeMinutes - currentTimeMinutes;
+    // console.log(calc);
+
+    if (calc < 0) {
+      calc += 24 * 60;
+    }
+
+    const remainingHours = Math.floor(calc / 60);
+    const remainingMinute = calc % 60;
+    if (remainingHours !== 0 && remainingMinute !== 0) {
+      toast(
+        `Alarm set for ${remainingHours} hours and ${remainingMinute} minutes from now`,
+        {
+          style: {
+            fontSize: "15px",
+            borderRadius: "8px",
+          },
+        }
+      );
+    }
+    // console.log(
+    //   `Alarm set for ${remainingHours} hours and ${remainingMinute} minutes from now`
+    // );
+
+    if (remainingHours === 0 && remainingMinute === 0) {
+      toast(`Alarm set for now`, {
+        style: {
+          fontSize: "15px",
+          borderRadius: "8px",
+        },
+      });
+    }
   };
 
   return (

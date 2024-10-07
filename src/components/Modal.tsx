@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IModal } from "../types/main.d";
 import Input from "./Input";
+import { toast } from "react-toastify";
 
 const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
   const [title, setTitle] = useState<string>(alarm?.alarmTitle || "");
@@ -25,6 +26,12 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
       );
       setError("");
       setShowModal(false);
+      toast.success("Edited", {
+        style: {
+          fontSize: "15px",
+          borderRadius: "8px",
+        },
+      });
     } else {
       setError("Please enter the empty one");
       setShowModal(true);
@@ -40,7 +47,6 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
 
     document.addEventListener("keydown", keyDownHandler);
   }, []);
-
 
   return (
     <div

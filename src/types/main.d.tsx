@@ -19,13 +19,18 @@ export interface IInput
   > {
   lable?: string;
   type: React.HTMLInputTypeAttribute;
+  error: string;
 }
 
 export interface IModal {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  alarm?: IValues
+  alarm?: IValues;
   setAlarms: React.Dispatch<SetStateAction<IValues[]>>;
 }
 export interface IModalTime {
-  alarms: IValues[]
+  alarms: IValues[];
+}
+export interface IPermissonModal {
+  deleteAlarm: () => void;
+  setShowModalDelete: React.Dispatch<SetStateAction<boolean>>;
 }

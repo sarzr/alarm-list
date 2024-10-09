@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "./Input";
 import { IValues } from "../types/main.d";
 import List from "./List";
@@ -7,13 +7,13 @@ import { toast } from "react-toastify";
 
 const Form: React.FC = () => {
   const [error, setError] = useState<string>("");
-  const [id, setId] = useState<number>(1);
+  const [disable, setDisable] = useState<boolean>(true);
 
   const [values, setValues] = useState<IValues>({
     alarmTime: 0,
     alarmDesc: "",
     alarmTitle: "",
-    id: id,
+    id: 0,
   });
 
   const [alarms, setAlarms] = useState<IValues[]>(() => {
@@ -32,7 +32,7 @@ const Form: React.FC = () => {
 
   const onSubmitHandler: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    const newValue = { ...values, id: id };
+    const newValue = { ...values, id: Date.now() };
     if (
       values.alarmDesc !== "" &&
       values.alarmTitle !== "" &&
@@ -41,19 +41,16 @@ const Form: React.FC = () => {
       setAlarms([...alarms, newValue]);
       setError("");
     } else {
-      setError("Please enter the empty ones...");
+      setError("Please enter...");
     }
-    setId(id + 1);
 
     const now = new Date();
     const alarmSet = values.alarmTime;
-    // console.log(alarmSet, typeof alarmSet);
 
     const currentTime = `${now.getHours()}:${now
       .getMinutes()
       .toString()
       .padStart(2, "0")}`;
-    // console.log(currentTime, "now", typeof currentTime);
 
     const [currentHour, currentMinute] = currentTime.split(":").map(Number);
     const [alarmSetHour, alarmSetMinute] = alarmSet
@@ -65,7 +62,6 @@ const Form: React.FC = () => {
     const alarmTimeMinutes = alarmSetHour * 60 + alarmSetMinute;
 
     let calc = alarmTimeMinutes - currentTimeMinutes;
-    // console.log(calc);
 
     if (calc < 0) {
       calc += 24 * 60;
@@ -73,7 +69,13 @@ const Form: React.FC = () => {
 
     const remainingHours = Math.floor(calc / 60);
     const remainingMinute = calc % 60;
-    if (remainingHours !== 0 && remainingMinute !== 0) {
+    if (
+      remainingHours !== 0 &&
+      remainingMinute !== 0 &&
+      values.alarmDesc !== "" &&
+      values.alarmTitle !== "" &&
+      values.alarmTime !== 0
+    ) {
       toast(
         `Alarm set for ${remainingHours} hours and ${remainingMinute} minutes from now`,
         {
@@ -84,9 +86,6 @@ const Form: React.FC = () => {
         }
       );
     }
-    // console.log(
-    //   `Alarm set for ${remainingHours} hours and ${remainingMinute} minutes from now`
-    // );
 
     if (remainingHours === 0 && remainingMinute === 0) {
       toast(`Alarm set for now`, {
@@ -97,6 +96,16 @@ const Form: React.FC = () => {
       });
     }
   };
+
+  useEffect(() => {
+    const isFormValid =
+      values.alarmTime !== 0 &&
+      values.alarmDesc !== "" &&
+      values.alarmTitle !== "";
+
+    setDisable(!isFormValid);
+
+  }, [values]);
 
   return (
     <>
@@ -113,6 +122,7 @@ const Form: React.FC = () => {
               onChangeHandler("alarmTime", event.target.value)
             }
             value={values.alarmTime}
+            error={error}
           />
           <Input
             type="text"
@@ -121,6 +131,7 @@ const Form: React.FC = () => {
               onChangeHandler("alarmDesc", event.target.value)
             }
             value={values.alarmDesc}
+            error={error}
           />
           <Input
             type="text"
@@ -129,10 +140,14 @@ const Form: React.FC = () => {
               onChangeHandler("alarmTitle", event.target.value)
             }
             value={values.alarmTitle}
+            error={error}
           />
           <button
+            disabled={disable}
             type="submit"
-            className="bg-green-600 text-white text-base sm:text-lg py-2 w-full rounded mt-4 hover:bg-green-700"
+            className={`${
+              disable ? "bg-green-700" : "bg-green-600"
+            } cursor-pointer text-white text-base sm:text-lg py-2 w-full rounded mt-4`}
           >
             SUBMIT
           </button>

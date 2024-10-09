@@ -8,7 +8,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
   const [isOpen, setIsOpen] = useState<string[]>([]);
   const [snoozeTime, setSnoozeTime] = useState<string>("");
 
-  const audioAlarm = useRef(new Audio("public/sound.mp3"));
+  const audioAlarm = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const showModalTimeHandler = () => {
@@ -24,7 +24,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
         if (currentTime === alarmTime && !isOpen.includes(alarmTime)) {
           setShowModalTime(true);
           setIsOpen((prevTime) => [...prevTime, alarmTime]);
-          audioAlarm.current.play();
+          audioAlarm.current?.play();
         }
       });
     };
@@ -34,7 +34,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
   }, [alarms, isOpen]);
 
   const closeModal = () => {
-    audioAlarm.current.pause();
+    audioAlarm.current?.pause();
     setShowModalTime(false);
   };
 
@@ -50,7 +50,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
 
     setTimeout(() => {
       setShowModalTime(true);
-      audioAlarm.current.play();
+      audioAlarm.current?.play();
     }, 300000);
     closeModal();
     toast("Alarm set for 5 minutes from now", {
@@ -74,7 +74,7 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
       ></div>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <div className="relative px-4 pt-12 pb-7 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:max-w-lg">
+          <div className="relative px-6 pt-12 pb-7 transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:max-w-lg">
             <div className="flex flex-shrink-0 items-center justify-center rounded-full sm:mx-0">
               <img
                 className="w-20 h-16 animate-shake"
@@ -85,14 +85,15 @@ const ModalTime: React.FC<IModalTime> = ({ alarms }) => {
             <div className="my-6 flex justify-center items-center gap-2">
               <div
                 onClick={() => {
-                  audioAlarm.current.pause();
+                  audioAlarm.current?.pause();
                 }}
               >
                 <img
-                  className="w-5 sm:w-8"
+                  className="w-5 sm:w-8 cursor-pointer"
                   src="../../public/images/icons8-sound-50.png"
                   alt="sound-alarm"
                 />
+                <audio ref={audioAlarm} src="public/sound.mp3"></audio>
               </div>
               <p className="text-sm sm:text-base sm:font-medium">
                 Alarm Time: {snoozeTime ? snoozeTime : showAlarmTime}

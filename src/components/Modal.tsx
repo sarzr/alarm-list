@@ -33,7 +33,7 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
         },
       });
     } else {
-      setError("Please enter the empty one");
+      setError("Please enter");
       setShowModal(true);
     }
   };
@@ -87,7 +87,7 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
               </div>
               <div className="flex flex-shrink-0 items-center justify-center rounded-full sm:mx-0">
                 <img
-                  className="w-20 h-16 animate-shake"
+                  className="w-20 h-16"
                   src="../../public/images/alarm-clock-svgrepo-com.svg"
                   alt="alarm"
                 />
@@ -95,31 +95,31 @@ const Modal: React.FC<IModal> = ({ setShowModal, alarm, setAlarms }) => {
               <div className="my-6 flex justify-center">
                 <p>Alarm Time: {alarm?.alarmTime}</p>
               </div>
-              <div className="flex flex-col gap-4 items-center">
-                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                  <Input
-                    type="text"
-                    lable="Alarm Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <Input
-                    type="text"
-                    lable="Alarm Discription"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                  <p
-                    className={`text-red-600 mt-4 text-sm ${
-                      error ? "" : "hidden"
-                    }`}
-                  >
-                    {error}
-                  </p>
-                </div>
+              <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left mx-3">
+                <Input
+                  type="text"
+                  lable="Alarm Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  error={error}
+                />
+                <Input
+                  type="text"
+                  lable="Alarm Discription"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  error={error}
+                />
+                <p
+                  className={`text-red-600 mt-4 text-sm ${
+                    error ? "" : "hidden"
+                  }`}
+                >
+                  {error}
+                </p>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 my-2">
+            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 mb-2">
               <button
                 onClick={closeModal}
                 type="button"

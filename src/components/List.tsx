@@ -3,11 +3,13 @@ import { IoIosArrowDown } from "react-icons/io";
 
 import { IList, IValues } from "../types/main.d";
 import Modal from "./Modal";
+import { PermissionModal } from "./PermissionModal";
 import { toast } from "react-toastify";
 
 const List: React.FC<IList> = ({ alarms, setAlarms }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-
+  const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
+  const [selectedAlarmId, setSelectedAlarmId] = useState<number | null>(null);
   const [ValueInput, setValueInput] = useState<IValues>();
 
   const timeSort = () => {
@@ -29,8 +31,14 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
     setValueInput(alarm);
   };
 
-  const deleteAlarm = (id: number) => {
-    setAlarms(alarms.filter((alarm) => alarm.id !== id));
+  const showDeleteModal = (id: number) => {
+    setShowModalDelete(true);
+    setSelectedAlarmId(id);
+  };
+
+  const deleteAlarm = () => {
+    setAlarms(alarms.filter((alarm) => alarm.id !== selectedAlarmId));
+    setShowModalDelete(false);
     toast.success("Deleted", {
       style: {
         fontSize: "15px",
@@ -51,7 +59,7 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
                   className="flex gap-1 items-center justify-center"
                 >
                   Time
-                  <IoIosArrowDown />
+                  <IoIosArrowDown className="cursor-pointer" />
                 </div>
               </th>
               <th className="py-4">
@@ -60,7 +68,7 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
                   className="flex gap-1 items-center justify-center"
                 >
                   Title
-                  <IoIosArrowDown />
+                  <IoIosArrowDown className="cursor-pointer" />
                 </div>
               </th>
               <th className="py-4">Discription</th>
@@ -78,13 +86,15 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
                 <td className="py-4">{alarm.alarmDesc}</td>
                 <td className="py-4 flex gap-2 justify-center text-base">
                   <button
-                    onClick={() => showModalHandler(alarm)}
+                    onClick={() => {
+                      showModalHandler(alarm);
+                    }}
                     className="text-white bg-green-600 py-1 px-4 rounded hover:bg-green-700"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => deleteAlarm(alarm.id)}
+                    onClick={() => showDeleteModal(alarm.id)}
                     className="text-white bg-red-500 py-1 px-3 rounded hover:bg-red-600"
                   >
                     Delete
@@ -100,6 +110,12 @@ const List: React.FC<IList> = ({ alarms, setAlarms }) => {
           setShowModal={setShowModal}
           alarm={ValueInput}
           setAlarms={setAlarms}
+        />
+      )}
+      {showModalDelete && (
+        <PermissionModal
+          deleteAlarm={deleteAlarm}
+          setShowModalDelete={setShowModalDelete}
         />
       )}
     </>
